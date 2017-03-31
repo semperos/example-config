@@ -1,8 +1,8 @@
 ;; manual dependencies
 (add-to-list 'load-path (concat user-emacs-directory "site-lisp/" "flycheck-20150207.329"))
 
-(require-package 'let-alist)
-(require-package 'flycheck-clojure)
+(quelpa 'let-alist :stable t)
+(quelpa 'flycheck-clojure :stable t)
 
 (require 'flycheck)
 

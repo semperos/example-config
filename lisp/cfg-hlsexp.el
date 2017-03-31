@@ -1,4 +1,4 @@
-(require-package 'hl-sexp)
+(quelpa 'hl-sexp :stable t)
 
 ;; hl-sexp: minor mode to highlight s-expression
 (require 'hl-sexp)

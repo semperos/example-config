@@ -1,3 +1,7 @@
+;; USE: emacs -nw -q --load /path/to/init.el
+(setq user-init-file (or load-file-name (buffer-file-name)))
+(setq user-emacs-directory (file-name-directory user-init-file))
+
 ;; ---------------------------------------------------
 ;; Sample emacs config focusing on clojure development
 ;; ---------------------------------------------------
@@ -34,28 +38,22 @@
 (setq package-user-dir (concat user-emacs-directory "elpa"))
 (add-to-list 'load-path (concat user-emacs-directory "site-lisp"))
 
-(defun require-package (package &optional min-version no-refresh)
-  "Install given PACKAGE, optionally requiring MIN-VERSION.
-If NO-REFRESH is non-nil, the available package lists will not be
-re-downloaded in order to locate PACKAGE."
-  (if (package-installed-p package min-version)
-      t
-    (if (or (assoc package package-archive-contents) no-refresh)
-        (package-install package)
-      (progn
-        (package-refresh-contents)
-        (require-package package min-version t)))))
-
 (setq package-enable-at-startup nil) ; Don't initialize later as well
 
 (package-initialize)
 
-;; show opening, closing parens
+;; Install/upgrade Quelpa
+(if (require 'quelpa nil t)
+    (quelpa-self-upgrade)
+  (with-temp-buffer
+    (url-insert-file-contents "https://raw.github.com/quelpa/quelpa/master/bootstrap.el")
+    (eval-buffer)))
+
 (show-paren-mode)
 
-(require-package 'epl)
+(quelpa 'epl :stable t)
 
-(require-package 'exec-path-from-shell)
+(quelpa 'exec-path-from-shell :stable t)
 ;; Sort out the $PATH for OSX
 (require 'exec-path-from-shell)
 (when (memq window-system '(mac ns))
@@ -69,7 +67,6 @@ re-downloaded in order to locate PACKAGE."
   (load (concat dotfiles-lisp-dir file)))
 
 
-  
 ;; Custom User configurations:
 ;; If you wish to add additional functionality to your emacs config beyond what is in this setup,
 ;; simply add a file called "user-customizations.el" to your .emacs.d/lisp/ directory. Within that file,
@@ -81,3 +78,15 @@ re-downloaded in order to locate PACKAGE."
 
 (when (file-exists-p (concat dotfiles-lisp-dir "user-customizations.el"))
   (load (concat dotfiles-lisp-dir "user-customizations.el")))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes (quote (wheatgrass))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

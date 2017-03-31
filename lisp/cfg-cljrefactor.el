@@ -1,5 +1,5 @@
 ;; clj-refactor and dependencies
-(require-package 'clj-refactor)
+(quelpa 'clj-refactor :stable t)
 
 (add-hook 'clojure-mode-hook
 	  (lambda ()

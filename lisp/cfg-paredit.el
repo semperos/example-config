@@ -1,4 +1,4 @@
-(require-package 'paredit)
+(quelpa 'paredit :stable t)
 
 ;; Paredit
 (require 'paredit)

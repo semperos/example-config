@@ -1,8 +1,8 @@
 ;; Clojure IDE and REPL for Emacs
-(require-package 'cider)
+(quelpa 'cider :stable t)
 
 ;; autocompletion
-(require-package 'company)
+(quelpa 'company :stable t)
 
 ;; REPL related stuff
 
