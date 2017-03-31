@@ -12,3 +12,9 @@ bookmarks
 request
 \#*\#
 tramp
+
+# Custom
+/elpa/
+/eshell/
+/ido.last
+/quelpa/
