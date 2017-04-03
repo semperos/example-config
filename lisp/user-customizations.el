@@ -4,6 +4,8 @@
 (quelpa 'browse-kill-ring :stable t)
 (quelpa 'ag :stable t)
 (quelpa 'magit :stable t)
+(quelpa 'yaml-mode :stable t)
+(quelpa 'ponylang-mode :stable t)
 
 ;;;;;;;;;;;;;;;;
 ;; Essentials ;;
