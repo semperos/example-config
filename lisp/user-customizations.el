@@ -1,9 +1,13 @@
 (message "Enabling customizations")
 
+(require 'cl)
+
 ;; Packages
 (quelpa 'browse-kill-ring :stable t)
 (quelpa 'ag :stable t)
+(quelpa 'lua-mode :stable t)
 (quelpa 'magit :stable t)
+(quelpa 'markdown-mode :stable t)
 (quelpa 'yaml-mode :stable t)
 (quelpa 'ponylang-mode :stable t)
 
@@ -130,6 +134,36 @@ Return an event vector."
     (split-window-below)
     (switch-to-buffer (other-buffer))
     (other-window 1)))
+
+(defun semperos/kill-matching-buffers
+    (regexp &optional internal-too)
+  "Kill buffers whose name matches the specified REGEXP. The optional second argument indicates whether to kill internal buffers too."
+  (interactive "sKill buffers matching this regular expression: \nP")
+  (let* ((buffers-to-kill (remove-if-not (lambda (buf)
+                                           (let ((name (buffer-name buf)))
+                                             (and name
+                                                  (not (string-equal name ""))
+                                                  (or internal-too (/= (aref name 0) ?\s))
+                                                  (string-match regexp name))))
+                                         (buffer-list))))
+    (if (zerop (length buffers-to-kill))
+        (message "No buffers match that regular expression.")
+      (let* ((buffer-names (map 'list (lambda (buf) (concat " * " (buffer-name buf))) buffers-to-kill))
+             (prompt (concat (mapconcat 'identity
+                                        (cons "Matching Buffers:\n================" buffer-names)
+                                        "\n")
+                             "\n\nAre these the buffers to kill? "))
+             (continue? (y-or-n-p (concat prompt "\n"))))
+        (when continue?
+          (dolist (buffer buffers-to-kill)
+            (progn
+              (message (concat "Killing buffer " (buffer-name buffer)))
+              (kill-buffer buffer)))
+          (message "Killed all matching buffers."))))))
+
+  (defun semperos/kill-clojure-buffers ()
+    (interactive)
+    (semperos/kill-matching-buffers "\\.clj"))
 
 ;; Key Bindings
 (global-set-key (kbd "C-o") 'ido-find-file)
